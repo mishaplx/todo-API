@@ -4,7 +4,8 @@ export default (req, res, next) => {
     try {
         if (token) {
             try {
-                const decode = jwt.verify(token, process.env.JWT_SECRET_KEY)
+                const secret = process.env.JWT_SECRET_KEY
+                const decode = jwt.verify(token, secret)
 
                 req.userId = decode._id
                 next()

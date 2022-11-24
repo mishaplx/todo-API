@@ -1,26 +1,22 @@
 import express from 'express'
-const cors = require('cors')
+import cors from 'cors'
 import * as mongoose from 'mongoose'
-import { login, check, registrate } from './controllers/userController.js'
+
 import checkAuth from './utils/checkAuth.js'
 import {
     loginValidator,
     registerValidator,
     todoValidator,
 } from './validations/validator.js'
-import {
-    createToDoItem,
-    deleteToDoItem,
-    getAlToDoList,
-    getToDoById,
-    updateToDoItem,
-} from './controllers/postController.js'
-require('dotenv').config()
+import { Todo } from './controllers/toDoController.js'
+import dotenv from 'dotenv'
+import { UserController } from './controllers/userController.js'
 
+dotenv.config()
 const app = express()
 
 mongoose
-    .connect('mongodb://root:example@localhost:27017')
+    .connect(process.env.MONGO_CONNECT)
     .then(() => {
         console.log('DB Ok')
     })
@@ -29,19 +25,17 @@ mongoose
 app.use(express.json())
 app.use(cors())
 
-app.post('/auth/register', registerValidator, registrate)
+app.post('/auth/register', registerValidator, UserController.registrate)
+app.post('/auth/login', loginValidator, UserController.login)
+app.get('/auth/me', checkAuth, UserController.check)
 
-app.post('/auth/login', loginValidator, login)
-
-app.get('/auth/me', checkAuth, check)
-
-app.post('/post/', checkAuth, todoValidator, createToDoItem) // создание записи
-app.get('/post/', checkAuth, getAlToDoList) // олу
-app.get('/post/:id', checkAuth, getToDoById) // получить по id
-app.delete('/post/:id', checkAuth, deleteToDoItem) // удаление записи
-app.put('/post/:id', checkAuth, updateToDoItem)
+app.post('/post/', checkAuth, todoValidator, Todo.createToDoItem) // создание записи
+app.get('/posts/', checkAuth, Todo.getAlToDoList) // получить все записи
+app.get('/post/:id', checkAuth, Todo.getToDoById) // получить по id
+app.delete('/post/:id', checkAuth, Todo.deleteToDoItem) // удаление записи
+app.put('/post/:id', checkAuth, Todo.updateToDoItem)
 
 const PORT = process.env.PORT
 app.listen(+PORT, () => {
-    console.log('Server Ok,listen localhost:4444')
+    console.log(`Server Ok,listen localhost:${PORT}`)
 })

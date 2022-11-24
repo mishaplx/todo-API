@@ -4,10 +4,9 @@
   "main": "src/index.js",
   "type": "module",
   "scripts": {
-    "build": "npx tsc",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node dist/index.js",
-    "start:dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/index.js\"",
+    "start": "node index.js",
+    "start:dev": " \"nodemon src/index.js\"",
     "prebuild": "npm run lint",
     "format:check": "prettier --check .",
     "format:write": "prettier --write .",
@@ -28,7 +27,6 @@
     "mongoose": "^6.7.2"
   },
   "devDependencies": {
-    "concurrently": "^7.5.0",
     "eslint": "^8.28.0",
     "eslint-config-prettier": "^8.5.0",
     "nodemon": "^2.0.20",
