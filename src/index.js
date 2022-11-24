@@ -13,6 +13,11 @@ import dotenv from 'dotenv'
 import { UserController } from './controllers/userController.js'
 
 dotenv.config()
+/**
+ * @file index.js is the root file for this example app
+ * @author Brad Traversy
+ * @see <a href="https://github.com/mishaplx/todo-API">Plehnevich Misha</a>
+ */
 const app = express()
 
 mongoose
