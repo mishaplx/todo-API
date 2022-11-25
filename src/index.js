@@ -9,15 +9,15 @@ import {
     registerValidator,
     todoValidator,
 } from './validations/validator.js'
-import { Todo } from './controllers/toDoController.js'
+import Todo  from './controllers/toDoController.js'
 import dotenv from 'dotenv'
-import { UserController } from './controllers/userController.js'
+import  UserController  from './controllers/userController.js'
 
 dotenv.config()
 const __filename = fileURLToPath(import.meta.url)
 
 const __dirname = path.dirname(__filename)
-console.log(__dirname)
+
 /**
  * @file index.js is the root file for this example app
  * @author Plehnevich Misha

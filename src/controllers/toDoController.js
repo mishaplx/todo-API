@@ -1,7 +1,7 @@
 import ToDoSchema from '../models/posts.model.js'
 import { validationResult } from 'express-validator'
 
-export const Todo = {
+ const Todo = {
     /**
      *Создание записи
      * @param req
@@ -161,3 +161,4 @@ export const Todo = {
         }
     },
 }
+export default Todo

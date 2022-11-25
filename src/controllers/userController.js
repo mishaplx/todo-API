@@ -7,7 +7,7 @@ dotenv.config()
 
 import userModel from '../models/user.model.js'
 
-export const UserController = {
+ const UserController = {
     /**
      * Регистрация пользователя
      * @param req
@@ -106,3 +106,4 @@ export const UserController = {
         }
     },
 }
+export default UserController
