@@ -7,10 +7,6 @@ dotenv.config()
 
 import userModel from '../models/user.model.js'
 
-/**
- *
- * @type {{registrate: ((function(*, *): Promise<*>)|*), check: ((function(*, *): Promise<void>)|*), login: ((function(*, *): Promise<*>)|*)}}
- */
 export const UserController = {
     /**
      * Регистрация пользователя

@@ -1,8 +1,6 @@
 import ToDoSchema from '../models/posts.model.js'
 import { validationResult } from 'express-validator'
-/**
- * @module TODO
- */
+
 export const Todo = {
     /**
      *Создание записи
@@ -57,7 +55,40 @@ export const Todo = {
     getAlToDoList: async (req, res) => {
         try {
             const toDoList = await ToDoSchema.find().populate('user').exec()
+
             res.json(toDoList)
+        } catch (e) {
+            console.log(e)
+            res.status(500).json({
+                message: 'ошибка сервера',
+            })
+        }
+    },
+    /**
+     *
+     * @param req
+     * @param res
+     * @returns {Promise<void>}
+     */
+    getAlToDoListWithPagination: async (req, res) => {
+        try {
+            const countRecords = await ToDoSchema.count()
+
+            const count = Number(req.params.count) // сколько записей нужно отобразить на страницу
+            const currentPage = Number(req.params.page) // какую страницу нужно получить
+            const skip = count * (currentPage - 1)
+            const limit = count
+            const toDoList = await ToDoSchema.find()
+                .skip(skip)
+                .limit(limit)
+                .populate('user')
+                .exec()
+            const metadata = {
+                currentPage: currentPage,
+                pages: Math.ceil(countRecords / count),
+                records: countRecords,
+            }
+            res.json({ toDoList, metadata })
         } catch (e) {
             console.log(e)
             res.status(500).json({

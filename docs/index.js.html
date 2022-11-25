@@ -29,7 +29,8 @@
             <pre class="prettyprint source linenums"><code>import express from 'express'
 import cors from 'cors'
 import * as mongoose from 'mongoose'
-
+import path from 'path'
+import { fileURLToPath } from 'url'
 import checkAuth from './utils/checkAuth.js'
 import {
     loginValidator,
@@ -41,10 +42,24 @@ import dotenv from 'dotenv'
 import { UserController } from './controllers/userController.js'
 
 dotenv.config()
+const __filename = fileURLToPath(import.meta.url)
+
+const __dirname = path.dirname(__filename)
 /**
  * @file index.js is the root file for this example app
- * @author Brad Traversy
+ * @author Plehnevich Misha
  * @see &lt;a href="https://github.com/mishaplx/todo-API">Plehnevich Misha&lt;/a>
+ *
+ */
+
+/** Express router providing user related routes
+ * @module todo
+ * @requires express
+ */
+
+/**
+ * express module
+ * @const
  */
 const app = express()
 
@@ -54,18 +69,107 @@ mongoose
         console.log('DB Ok')
     })
     .catch(err => console.log('DB connection ERROR---', err))
-
+app.use('/', express.static(__dirname + '/public'))
 app.use(express.json())
 app.use(cors())
-
+/**
+ * Route serving login.
+ * @name /auth/register
+ * @function
+ * @memberof module:todo
+ * @inner
+ * @param {string} path - Express path
+ * @param {callback} middleware - Express middleware.
+ * @param {callback} registrate - function.
+ */
 app.post('/auth/register', registerValidator, UserController.registrate)
+/**
+ * Route serving login.
+ * @name /auth/login
+ * @function
+ * @memberof module:todo
+ * @inner
+ * @param {string} path - Express path
+ * @param {callback} middleware - Express middleware.
+ * @param {callback} login - function.
+ */
 app.post('/auth/login', loginValidator, UserController.login)
+/**
+ * Route serving in check.
+ * @name /auth/me
+ * @function
+ * @memberof module:check
+ * @inner
+ * @param {string} path - Express path
+ * @param {callback} middleware - Express middleware.
+ * @param {callback} registrate - function.
+ */
 app.get('/auth/me', checkAuth, UserController.check)
-
+/**
+ * Route serving create todo.
+ * @name /post/
+ * @function
+ * @memberof module:todo
+ * @inner
+ * @param {string} path - Express path
+ * @param {callback} middleware - Express middleware.
+ * @param {callback} createToDoItem - function.
+ */
 app.post('/post/', checkAuth, todoValidator, Todo.createToDoItem) // создание записи
+/**
+ * Route serving get all todo.
+ * @name /posts/
+ * @function
+ * @memberof module:todo
+ * @inner
+ * @param {string} path - Express path
+ * @param {callback} middleware - Express middleware.
+ * @param {callback} getAlToDoList - function.
+ */
 app.get('/posts/', checkAuth, Todo.getAlToDoList) // получить все записи
+/**
+ * Route serving get all todo with pagination.
+ * @name /posts/page/:page/count/:count/
+ * @function
+ * @memberof module:todo
+ * @inner
+ * @param {string} path - Express path
+ * @param {callback} middleware - Express middleware.
+ * @param {callback} getAlToDoListWithPagination - function.
+ */
+app.get('/posts/page/:page/count/:count', Todo.getAlToDoListWithPagination) // получить записи с пагинацией
+/**
+ * Route serving get todo item by id
+ * @name /post/:id
+ * @function
+ * @memberof module:getToDoById
+ * @inner
+ * @param {string} path - Express path
+ * @param {callback} middleware - Express middleware.
+ * @param {callback} registrate - function.
+ */
 app.get('/post/:id', checkAuth, Todo.getToDoById) // получить по id
+/**
+ * Route serving delete todo.
+ * @name /post/:id
+ * @function
+ * @memberof module:todo
+ * @inner
+ * @param {string} path - Express path
+ * @param {callback} middleware - Express middleware.
+ * @param {callback} deleteToDoItem - function.
+ */
 app.delete('/post/:id', checkAuth, Todo.deleteToDoItem) // удаление записи
+/**
+ * Route serving upate todo item.
+ * @name /post/:id
+ * @function
+ * @memberof module:todo
+ * @inner
+ * @param {string} path - Express path
+ * @param {callback} middleware - Express middleware.
+ * @param {callback} updateToDoItem - function.
+ */
 app.put('/post/:id', checkAuth, Todo.updateToDoItem)
 
 const PORT = process.env.PORT
@@ -82,13 +186,13 @@ app.listen(+PORT, () => {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-TODO.html">TODO</a></li></ul><h3>Classes</h3><ul><li><a href="%25D0%25A1%25D1%2585%25D0%25B5%25D0%25BC%25D0%25B0%2520%25D0%25B4%25D0%25BE%25D0%25BA%25D1%2583%25D0%25BC%25D0%25B5%25D0%25BD%25D1%2582%25D0%25B0%2520Todo.html">Схема документа Todo</a></li><li><a href="%25D0%25A1%25D1%2585%25D0%25B5%25D0%25BC%25D0%25B0%2520%25D0%25B4%25D0%25BE%25D0%25BA%25D1%2583%25D0%25BC%25D0%25B5%25D0%25BD%25D1%2582%25D0%25B0%2520user.html">Схема документа user</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-todo.html">todo</a></li></ul><h3>Global</h3><ul><li><a href="global.html#UserController">UserController</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.0</a> on Thu Nov 24 2022 16:16:45 GMT+0300 (Москва, стандартное время)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.0</a> on Fri Nov 25 2022 09:22:55 GMT+0300 (Москва, стандартное время)
 </footer>
 
 <script> prettyPrint(); </script>
