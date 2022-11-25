@@ -17,6 +17,7 @@ dotenv.config()
 const __filename = fileURLToPath(import.meta.url)
 
 const __dirname = path.dirname(__filename)
+console.log(__dirname)
 /**
  * @file index.js is the root file for this example app
  * @author Plehnevich Misha
@@ -42,8 +43,10 @@ mongoose
     })
     .catch(err => console.log('DB connection ERROR---', err))
 app.use('/', express.static(__dirname + '/public'))
+app.use('/docs', express.static(__dirname + '/docs'))
 app.use(express.json())
 app.use(cors())
+
 /**
  * Route serving login.
  * @name /auth/register
@@ -109,7 +112,7 @@ app.get('/posts/', checkAuth, Todo.getAlToDoList) // получить все з�
  * @param {callback} middleware - Express middleware.
  * @param {callback} getAlToDoListWithPagination - function.
  */
-app.get('/posts/page/:page/count/:count', Todo.getAlToDoListWithPagination) // получить записи с пагинацией
+app.get('/posts/page/:page/count/:count', checkAuth, Todo.getAlToDoListWithPagination) // получить записи с пагинацией
 /**
  * Route serving get todo item by id
  * @name /post/:id
